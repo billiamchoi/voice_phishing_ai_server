@@ -23,7 +23,7 @@ def get_text():
 
 @app.route("/api", methods=["POST"])
 def save_text():
-	server_text = request.form["stttext"]
+	server_text = request.json["stttext"]
 	sql = "insert into stt_text (stttext) values ('%s')" %(server_text)
 	cursor.execute(sql)
 	db.commit()
