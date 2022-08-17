@@ -28,6 +28,5 @@ def predict_text(input_text):
     else:
         return print(model.predict(user_data), '이것은 보이스피싱이 아닙니다')
 
-        # print(model.predict(user_data))
 
 
