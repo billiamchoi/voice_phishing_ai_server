@@ -23,8 +23,8 @@ def create_stt_text():
 	# sql = """ insert into stt_text (text) values ('%s') """ % text
 	# cursor.execute(sql)
 	# db.commit()
-	text_model.predict_text(text)
-	return "OK"
+	score = str(text_model.predict_text(text)[0][0])
+	return score
 
 @app.route("/api/stt_voice", methods=["POST"])
 def upload_file():

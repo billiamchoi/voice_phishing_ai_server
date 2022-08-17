@@ -13,20 +13,12 @@ max_len = 450
 
 def predict_text(input_text):
     user_input = input_text.split()
-
-
     user_data = [[]]
     for word in user_input:
         if word not in stop_words:
             user_data[0].append(word.lower())
-
     user_data = tokenizer.texts_to_sequences(user_data)
     user_data = pad_sequences(user_data, maxlen=max_len)
-
-    if (model.predict(user_data) > 0.5):
-        return print(model.predict(user_data), '이것은 보이스피싱입니다')
-    else:
-        return print(model.predict(user_data), '이것은 보이스피싱이 아닙니다')
-
+    return model.predict(user_data)
 
 
