@@ -18,13 +18,25 @@ def main():
 @app.route("/api/stt_text", methods=["POST"])
 def create_stt_text():
 	text = request.json["text"]
-	# 긴 텍스트 핸들링을 위해 잠시 주석처리 // db text 칼럼을 굉장히 긴 텍스트도 받을 수 있도록 수정 필요
-
-	# sql = """ insert into stt_text (text) values ('%s') """ % text
-	# cursor.execute(sql)
-	# db.commit()
+	first_sql = """ insert into stt_text (text) values ('%s') """ % text
+	cursor.execute(first_sql)
+	stt_text_id = cursor.lastrowid
+	db.commit()
+	second_sql = """ update stt_text_seg set stt_text_id = '%s' where stt_text_id is null """ % stt_text_id
+	cursor.execute(second_sql)
+	db.commit()
 	score = str(text_model.predict_text(text)[0][0])
 	return score
+
+@app.route("/api/stt_text_seg", methods=["POST"])
+def create_stt_text_seg():
+	text = request.json["text"]
+	sql = """ insert into stt_text_seg (text) values ('%s') """ % text
+	cursor.execute(sql)
+	db.commit()
+	score = str(text_model.predict_text(text)[0][0])
+	return score
+
 
 @app.route("/api/stt_voice", methods=["POST"])
 def upload_file():
