@@ -1,11 +1,36 @@
 from keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import pickle
+from keras import backend as K
 
 with open('pickles/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
 
-model = load_model('models/text_lstm_model.h5')
+
+def recall_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+    return recall
+
+def precision_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    return precision
+
+def f1_m(y_true, y_pred):
+    precision = precision_m(y_true, y_pred)
+    recall = recall_m(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
+dependencies = {
+    'recall_m': recall_m,
+    'precision_m': precision_m,
+    'f1_m': f1_m
+}
+
+model = load_model(filepath='models/text_lstm_model.h5', custom_objects=dependencies)
 
 stop_words = ['이', '있', '하', '것', '들', '그', '되', '수', '이', '보', '않', '없', '나', '사람', '주', '아니', '등', '같', '우리', '때', '년', '가', '한', '지', '대하', '오', '말', '일', '그렇', '위하', '때문', '그것', '두', '말하', '알', '그러나', '받', '못하', '일', '그런', '또', '문제', '더', '사회', '많', '그리고', '좋', '크', '따르', '중', '나오', '가지', '씨', '시키', '만들', '지금', '생각하', '그러', '속', '하나', '집', '살', '모르', '적', '월', '데', '자신', '안', '어떤', '내', '내', '경우', '명', '생각', '시간', '그녀', '다시', '이런', '앞', '보이', '번', '나', '다른', '어떻', '여자', '개', '전', '들', '사실', '이렇', '점', '싶', '말', '정도', '좀', '원', '잘', '통하', '소리', '놓']
 
