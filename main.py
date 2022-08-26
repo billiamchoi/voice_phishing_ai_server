@@ -4,6 +4,7 @@ import pymysql
 from settings import MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 import os
 import scripts.text_lstm_model as text_model
+import scripts.voice_lstm_model as voice_model
 
 db = pymysql.connect(host='localhost', port=3306, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DB, charset="utf8")
 cursor = db.cursor()
@@ -53,8 +54,12 @@ def create_stt_voice_seg():
 	file = request.files['file']
 	file_name = request.form['file_name']
 	directory_name = request.form['directory_name']
-	file.save("""voice_files/segment/%s/%s.wav""" % (directory_name, file_name))
-	return "file successfully saved"
+	sr = request.form['sr']
+	second = request.form['second']
+	file_path = """voice_files/segment/%s/%s.wav""" % (directory_name, file_name)
+	file.save(file_path)
+	score = str(voice_model.predict_voice(file_path, sr, 40, second))
+	return score
 
 @app.route("/api/start_record", methods=["POST"])
 def start_record():
