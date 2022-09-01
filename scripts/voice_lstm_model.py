@@ -23,3 +23,13 @@ def predict_voice(wav_file, sr, n_mfcc, second):
     result_mfcc = np.expand_dims(result_mfcc, axis=0)
     return np.mean(model.predict(result_mfcc)[0])
 
+def predict_voice_mel(wav_file, sr, n_mels, second):
+    sr = int(sr)
+    second = int(second)
+    data, sr = librosa.load(wav_file, sr=sr)
+    mel = librosa.feature.melspectogram(y=np.array(data), sr=sr, n_fft=400, hop_length=160, n_mels=n_mels)
+    # "y="을 왜 넣는가?
+    result_mel = padding(n_mels, sr, second)
+    result_mel = np.expand_dims(result_mel, axis=0)
+    return np.mean(model.predict(result_mel)[0]) # mean, 왜?
+    # mfcc를 mel로 바꾸긴 했다. 잘 동작하는가를 알아보려면 테스트가 필요하다.
