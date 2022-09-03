@@ -47,7 +47,6 @@ def create_stt_voice():
 	file.save("""voice_files/whole/%s.wav""" % file_name)
 	return "file successfully saved"
 
-# mel용
 @app.route("/api/stt_voice_seg", methods=["POST"])
 def create_stt_voice_seg():
 	if 'file' not in request.files:
