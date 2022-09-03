@@ -30,5 +30,4 @@ def predict_voice_mel(wav_file, sr, n_mels, second):
     mel = librosa.feature.melspectrogram(y=np.array(data), sr=sr, hop_length=160, n_mels=n_mels)
     result_mel = padding(mel, sr, second)
     result_mel = np.expand_dims(result_mel, axis=0)
-    return np.mean(model.predict(result_mel)[0])
-
+    return model.predict(result_mel)[0][0]
