@@ -47,20 +47,6 @@ def create_stt_voice():
 	file.save("""voice_files/whole/%s.wav""" % file_name)
 	return "file successfully saved"
 
-# @app.route("/api/stt_voice_seg", methods=["POST"]) # 이 친구 잠시 보류
-# def create_stt_voice_seg():
-# 	if 'file' not in request.files:
-# 		return "No file found"
-# 	file = request.files['file']
-# 	file_name = request.form['file_name']
-# 	directory_name = request.form['directory_name']
-# 	sr = request.form['sr']
-# 	second = request.form['second']
-# 	file_path = """voice_files/segment/%s/%s.wav""" % (directory_name, file_name)
-# 	file.save(file_path)
-# 	score = str(voice_model.predict_voice(file_path, sr, 40, second))   # 40? mfcc 값인가?
-# 	return score
-
 # mel용
 @app.route("/api/stt_voice_seg", methods=["POST"])
 def create_stt_voice_seg():
@@ -73,7 +59,7 @@ def create_stt_voice_seg():
 	second = request.form['second']
 	file_path = """voice_files/segment/%s/%s.wav""" % (directory_name, file_name)
 	file.save(file_path)
-	score = str(voice_model.predict_voice_mel(file_path, sr, 40, second))   #
+	score = str(voice_model.predict_voice_mel(file_path, sr, 40, second))   # 40 = n_mels
 	return score
 
 @app.route("/api/start_record", methods=["POST"])
