@@ -5,6 +5,7 @@ from settings import MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 import os
 import scripts.text_lstm_model as text_model
 import scripts.voice_lstm_model as voice_model
+import scripts.text_lstm_ae_model as ae_text_model
 
 db = pymysql.connect(host='localhost', port=3306, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DB, charset="utf8")
 cursor = db.cursor()
@@ -35,8 +36,13 @@ def create_stt_text_seg():
 	sql = """ insert into stt_text_seg (text) values ('%s') """ % text
 	cursor.execute(sql)
 	db.commit()
-	score = str(text_model.predict_text(text)[0][0])
+	# 예전 lstm 모델 쓰실려면 아래 꺼 쓰시고
+	# score = str(text_model.predict_text(text)[0][0])
+	# 예전 lstm-ae 모델 쓰실려면 아래 꺼 쓰시고
+	score = str(ae_text_model.predict_text(text))
 	return score
+
+@app.route("/api/stt_text_seg")
 
 @app.route("/api/stt_voice", methods=["POST"])  # 이친구 안씀
 def create_stt_voice():
