@@ -280,7 +280,7 @@ def okt_test(input):
     okt = Okt()
     input = regex_check(input)
     # hanspell 맞춤법 검사
-    input = spell_check(input)
+    # input = spell_check(input)
     list = okt.morphs(input)
 
     #just for colab. please do not do this at server
