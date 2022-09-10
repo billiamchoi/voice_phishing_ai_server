@@ -70,7 +70,6 @@ def spell_check(input):
 
 def josa_eomi(text):
     import re
-    import pandas as pd
     Josa = ['가', '같이', '같이나', '같이는', '같이는야', '같이는커녕', '같이도', '같이만', '같인', '고', '과', '과는', '과는커녕', '과도', '과를', '과만',
             '과만은', '과의', '까지', '까지가', '까지나', '까지나마', '까지는', '까지는야', '까지는커녕', '까지도', '까지든지', '까지라고', '까지라고는', '까지라고만은',
             '까지라도', '까지로', '까지로나', '까지로나마', '까지로는', '까지로는야', '까지로는커녕', '까지로도', '까지로든', '까지로든지', '까지로라서', '까지로라야',
@@ -178,15 +177,6 @@ def okt_test(input):
     # hanspell 맞춤법 검사
     # input = spell_check(input)
     list = okt.morphs(input)
-
-    #just for colab. please do not do this at server
-    for i in list:
-      if(i == "."):
-        list.remove(".")
-      elif(i == "?"):
-        list.remove("?")
-      elif(i == ","):
-        list.remove(",")
 
     a =''
     for element in list:
