@@ -2,16 +2,16 @@ from keras.models import load_model
 import librosa
 import numpy as np
 
-model = load_model(filepath='models/model3.h5')
+model = load_model(filepath='models/voice_lstm_model.h5')
 
 def padding(mel_spec, sr, second):
     #501 이해하고 dynamic 하게 짜야됨
-    if(len(mel_spec[0])<= 3001):
-        z = np.zeros((len(mel_spec), 3001-(len(mel_spec[0]))), dtype=int)
+    if(len(mel_spec[0])<= 501):
+        z = np.zeros((len(mel_spec), 501-(len(mel_spec[0]))), dtype=int)
         result = np.append(mel_spec, z, axis=1)
     else:
         # 여기 501도 mfcc 조합에 따라 다 바뀌어야 함
-        result = mel_spec[:,0:3001]
+        result = mel_spec[:,0:501]
     return result
 
 def predict_voice_mfcc(wav_file, sr, n_mfcc, second):
@@ -30,4 +30,4 @@ def predict_voice_mel(wav_file, sr, n_mels, second):
     mel = librosa.feature.melspectrogram(y=np.array(data), sr=sr, hop_length=160, n_mels=n_mels)
     result_mel = padding(mel, sr, second)
     result_mel = np.expand_dims(result_mel, axis=0)
-    return model.predict(result_mel)[0][0]
+    return model.predict(result_mel)[0][0][0]

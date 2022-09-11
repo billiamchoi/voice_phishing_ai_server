@@ -150,6 +150,7 @@ def josa_eomi(text):
             '을지어다', '을지언정', '을지요', '을진대', '을진댄', '을진저', '을테다', '을텐데', '음', '음세', '음에도', '음에랴', '읍쇼', '읍시다', '읍시다요',
             '읍시오', '자', '자고', '자고까지', '자고까지는', '자고까지라도', '자고는', '자고도', '자고만', '자고만은', '자꾸나', '자는', '자마자', '자면', '자면요',
             '잔', '잘', '지', '지는', '지도', '지를', '지마는', '지만', '지요', '진', '질']
+    call = ['여보세요', '안녕하세요', '안녕하십니까']
 
     pattern0 = re.compile(r'\b(' + r'|'.join(Josa) + r')\b\s*')
     pattern1 = re.compile(r'\b(' + r'|'.join(Eomi) + r')\b\s*')
@@ -168,6 +169,8 @@ def josa_eomi(text):
     text = pattern5.sub(',', text)
     pattern6 = re.compile(',,+')
     text = pattern6.sub(',', text)
+    pattern7 = re.compile(r'\b(' + r'|'.join(call) + r')\b\s*')
+    text = pattern7.sub('', text)
     return text
 
 def okt_test(input):
