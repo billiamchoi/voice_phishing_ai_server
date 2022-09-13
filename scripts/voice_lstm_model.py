@@ -1,3 +1,4 @@
+import re
 from keras.models import load_model
 import librosa
 import numpy as np
@@ -31,12 +32,13 @@ def predict_voice_mel(wav_file, sr, n_mels, second):
     result_mel = padding(mel, sr, second)
     result_mel = np.expand_dims(result_mel, axis=0)
     pre_result_mel = model.predict(result_mel)
+    pre_result_mel = pre_result_mel.reshape(-1,20040)
+    result_mel = result_mel.reshape(-1,20040)
     mse = np.mean(np.power(result_mel - pre_result_mel, 2))
     error_df = pd.DataFrame({'Reconstruction_error': mse})
     vo_threshold_fixed = 267
     ab_pred = [1 if e > vo_threshold_fixed else 0 for e in error_df['Reconstruction_error'].values]
-    if y_pred == [1]:
+    if ab_pred == [1]:
         return 1
     else:
         return 0
-    return pre_result_mel 
